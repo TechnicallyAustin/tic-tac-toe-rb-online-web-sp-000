@@ -1,4 +1,6 @@
 # Helper Method
+require 'pry'
+
 def display_board(board)
   puts " #{board[0]} | #{board[1]} | #{board[2]} "
   puts "-----------"
@@ -38,25 +40,26 @@ def turn(board)
   user_input = gets.strip
   index = input_to_index(user_input)
   if valid_move?(board, index)
-    move(board, index, current_player(board))
+    move(board, index, current_player)
     display_board(board)
-  else
-    #turn(board)
+    draw?(board)
+  elsif !valid_move?(board, index)
+   turn(board)
   end
 end
 
 def play(board)
-  until over?(board)
-    turn(board) 
+    until over?(board)
+      turn(board)
+      draw?(board)
+    end
+    
+    if won?(board)
+      puts "Congratulations #{winner}!"
+    elsif draw?(board)
+      puts "Cat's Game!"
+    end
   end
-  if won?(board)
-    winner(board) == "X" || winner(board) == "O"
-    puts "Congratulations #{winner(board)}!"
-  else draw?(board)
-    puts "Cat\'s Game!"
-  end
-end
-  
   
   
 def position_taken?(board, index)
